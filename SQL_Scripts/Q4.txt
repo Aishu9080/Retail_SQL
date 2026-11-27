@@ -1,0 +1,9 @@
+
+SELECT
+    O.OrderID,
+    O.CustomerID,
+    C.CustomerName
+FROM Orders O
+INNER JOIN Customers C
+    ON O.CustomerID = C.CustomerID
+ORDER BY O.OrderID;
