@@ -1,0 +1,9 @@
+
+SELECT
+    OrderItemID,
+    COUNT(ReturnID) AS ReturnTransactionCount,
+    SUM(ReturnQuantity) AS TotalReturnedUnits
+FROM Returns
+GROUP BY OrderItemID
+HAVING COUNT(ReturnID) > 1
+ORDER BY OrderItemID;
