@@ -1,0 +1,56 @@
+Step 1: Create Regions table
+CREATE TABLE Regions (
+    RegionID INT PRIMARY KEY,
+    RegionName VARCHAR(50) UNIQUE NOT NULL
+);
+
+Step 2: Insert standardized regions
+INSERT INTO Regions (RegionID, RegionName)
+VALUES
+(1, 'North'),
+(2, 'South'),
+(3, 'West');
+
+Step 3: Add RegionID column to Stores
+ALTER TABLE Stores
+ADD RegionID INT NULL;
+
+Step 4: Map raw regions to standardized regions
+UPDATE S
+SET S.RegionID = R.RegionID
+FROM Stores S
+JOIN Regions R
+ON CASE
+    WHEN UPPER(LTRIM(RTRIM(S.RegionRaw))) IN ('N', 'NORTH')
+        THEN 'North'
+    WHEN UPPER(LTRIM(RTRIM(S.RegionRaw))) IN ('S', 'SOUTH')
+        THEN 'South'
+    WHEN UPPER(LTRIM(RTRIM(S.RegionRaw))) IN ('W', 'WEST')
+        THEN 'West'
+END = R.RegionName;
+
+Step 5: Add Foreign Key
+ALTER TABLE Stores
+ADD CONSTRAINT FK_Stores_Regions
+FOREIGN KEY (RegionID)
+REFERENCES Regions(RegionID);
+
+Step 6: Display store-to-region mapping
+SELECT
+    S.StoreID,
+    S.StoreName,
+    S.RegionRaw,
+    R.RegionID,
+    R.RegionName
+FROM Stores S
+LEFT JOIN Regions R
+ON S.RegionID = R.RegionID
+ORDER BY S.StoreID;
+
+Step 7: Find unmapped stores
+SELECT
+    StoreID,
+    StoreName,
+    RegionRaw
+FROM Stores
+WHERE RegionID IS NULL;
