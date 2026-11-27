@@ -1,0 +1,19 @@
+Comparison
+
+Region	Gross Sales	Net Sales
+
+North	$14,389.25	$12,827.00
+South	$14,329.25	$13,037.00
+West	$14,039.25	$12,762.00
+
+Answer:
+
+	•Highest gross sales: North ($14,389.25)
+	•Highest net sales: South ($13,037.00)
+	•Did the leader change? Yes.
+
+North led in gross sales, but South became the leader after deducting returns.
+Net sales difference between the top two regions
+[ 13,037-12,827=$210]
+
+South leads North by $210.00 in net sales.
