@@ -1,0 +1,21 @@
+
+SELECT
+    P.Category,
+    SUM(RT.ReturnQuantity * OI.UnitPrice) AS ReturnValue
+FROM Returns RT
+INNER JOIN OrderItems_Clean OI
+    ON RT.OrderItemID = OI.OrderItemID
+INNER JOIN Orders O
+    ON OI.OrderID = O.OrderID
+INNER JOIN Stores S
+    ON O.StoreID = S.StoreID
+INNER JOIN Regions R
+    ON S.RegionID = R.RegionID
+INNER JOIN Products P
+    ON OI.ProductID = P.ProductID
+WHERE R.RegionName = 'North'
+  AND O.OrderStatus = 'Completed'
+  AND RT.ReturnDate >= '2026-10-01'
+  AND RT.ReturnDate < '2026-11-01'
+GROUP BY P.Category
+ORDER BY ReturnValue DESC;
