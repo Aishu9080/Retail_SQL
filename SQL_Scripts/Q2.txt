@@ -1,0 +1,33 @@
+
+Step 1: Create a working copy of OrderItems
+SELECT *
+INTO OrderItems_Clean
+FROM OrderItems;
+
+
+Step 2: Identify and remove duplicate rows
+WITH DuplicateRecords AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY OrderItemID
+            ORDER BY LoadedAt DESC
+        ) AS RowNum
+    FROM OrderItems_Clean
+)
+DELETE FROM DuplicateRecords
+WHERE RowNum > 1;
+
+
+Step 3: Verify duplicate removal
+SELECT
+    OrderItemID,
+    COUNT(*) AS RecordCount
+FROM OrderItems_Clean
+GROUP BY OrderItemID
+HAVING COUNT(*) > 1;
+
+
+Step 4: Display cleaned data
+SELECT *
+FROM OrderItems_Clean
+ORDER BY OrderItemID;
