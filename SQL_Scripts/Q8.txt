@@ -1,0 +1,38 @@
+Query 1 – Gross sales by region
+
+SELECT
+    R.RegionName,
+    COUNT(DISTINCT O.OrderID) AS CompletedOrderCount,
+    SUM(OI.Quantity * OI.UnitPrice) AS GrossSales
+FROM Orders O
+INNER JOIN OrderItems_Clean OI
+    ON O.OrderID = OI.OrderID
+INNER JOIN Stores S
+    ON O.StoreID = S.StoreID
+INNER JOIN Regions R
+    ON S.RegionID = R.RegionID
+WHERE O.OrderStatus = 'Completed'
+  AND O.OrderDate >= '2026-10-01'
+  AND O.OrderDate < '2026-11-01'
+GROUP BY R.RegionName
+ORDER BY R.RegionName;
+
+Query 2 – Return value by region
+
+SELECT
+    R.RegionName,
+    SUM(RT.ReturnQuantity * OI.UnitPrice) AS ReturnValue
+FROM Returns RT
+INNER JOIN OrderItems_Clean OI
+    ON RT.OrderItemID = OI.OrderItemID
+INNER JOIN Orders O
+    ON OI.OrderID = O.OrderID
+INNER JOIN Stores S
+    ON O.StoreID = S.StoreID
+INNER JOIN Regions R
+    ON S.RegionID = R.RegionID
+WHERE O.OrderStatus = 'Completed'
+  AND RT.ReturnDate >= '2026-10-01'
+  AND RT.ReturnDate < '2026-11-01'
+GROUP BY R.RegionName
+ORDER BY R.RegionName;
