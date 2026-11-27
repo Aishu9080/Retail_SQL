@@ -1,0 +1,8 @@
+
+SELECT
+    O.OrderID,
+    O.CustomerID
+FROM Orders O
+LEFT JOIN Customers C
+    ON O.CustomerID = C.CustomerID
+WHERE C.CustomerID IS NULL;
